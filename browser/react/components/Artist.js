@@ -2,6 +2,10 @@ import React from 'react';
 import {Link} from 'react-router';
 import axios from 'axios';
 import Promise from 'bluebird';
+import Albums from './Albums';
+import {convertAlbum, convertSong} from '../utils';
+import Songs from './Songs';
+
 
 class Artist extends React.Component {
   constructor(props){
@@ -20,6 +24,7 @@ class Artist extends React.Component {
 
     Promise.all([artist, albums, songs])
       .spread((artist, albums, songs) => {
+        
         this.setState({
           artist: artist.data,
           albums: albums.data,
@@ -30,31 +35,39 @@ class Artist extends React.Component {
 
   render() {
     let artist = this.state.artist;
-    let albums = this.state.albums;
+    let albums = this.state.albums.map(album => {
+      return convertAlbum(album)
+    });
     let songs = this.state.songs;
-
     return (
-      <div>
-        <h3>{artist.name}</h3>
-        {albums.map((album) => {
-          return (
-            <div>
-              <h4>{album.name}</h4>
-            </div>
-          )
-        })}
+    <div>
+      <Albums albums={albums} />
+      <Songs songs={songs} />
+    </div>
 
-        {songs.map((song) => {
-          return (
-            <div>
-              <h4>{song.name}</h4>
-            </div>
-          )
-        })}
-
-      </div>
     )
   }
 }
 
 export default Artist;
+    // return (
+    //   <div>
+    //     <h3>{artist.name}</h3>
+    //     {albums.map((album) => {
+    //       return (
+    //         <div key={album.id}>
+    //           <h4>{album.name}</h4>
+    //         </div>
+    //       )
+    //     })}
+
+    //     {songs.map((song) => {
+    //       return (
+    //         <div key={song.id}>
+    //           <h4>{song.name}</h4>
+    //         </div>
+    //       )
+    //     })}
+
+    //   </div>
+    // )
