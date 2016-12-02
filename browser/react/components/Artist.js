@@ -19,7 +19,7 @@ class Artist extends React.Component {
     let songs = axios.get(`/api/artists/${this.props.params.artistId}/songs`)
 
     Promise.all([artist, albums, songs])
-      .spread(function(artist, albums, songs){
+      .spread((artist, albums, songs) => {
         this.setState({
           artist: artist.data,
           albums: albums.data,
@@ -36,8 +36,22 @@ class Artist extends React.Component {
     return (
       <div>
         <h3>{artist.name}</h3>
-        <h4>{artist.albums}</h4>
-        <h4>{artist.songs}</h4>
+        {albums.map((album) => {
+          return (
+            <div>
+              <h4>{album.name}</h4>
+            </div>
+          )
+        })}
+
+        {songs.map((song) => {
+          return (
+            <div>
+              <h4>{song.name}</h4>
+            </div>
+          )
+        })}
+
       </div>
     )
   }
